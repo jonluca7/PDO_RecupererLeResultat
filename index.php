@@ -6,15 +6,15 @@ require_once 'Game.php';
     $pdo= new PDO('mysql:host=localhost:3308;dbname=video_games', 'root', '');
     $search= '%';
     $sql= ('SELECT * FROM games WHERE name LIKE :search');
-    $statement= $pdo->prepare($sql);
-    $statement->bindvalue(':search', $_GET['search'].$search, PDO::PARAM_STR);
-    if($statement->execute())
+    $pdoStatement= $pdo->prepare($sql);
+    $pdoStatement->bindvalue(':search', ($_GET['search']??'').$search, PDO::PARAM_STR);
+    if($pdoStatement->execute())
     {
-        while($user= $statement->fetchObject('Game')){
+        while($user= $pdoStatement->fetchObject('Game')){
         echo $user->getFullDescription();
     }
 }else{
-    $errorInfo= $statement->errorInfo();
+    $errorInfo= $pdoStatement->errorInfo();
     echo $errorInfo[2];
 }
 
